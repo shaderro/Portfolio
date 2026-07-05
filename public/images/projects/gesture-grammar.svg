@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" fill="#F5F5F5"/>
+  <path d="M300 350 Q350 200 400 250 Q450 300 500 150" stroke="#2563EB" stroke-width="3" fill="none" opacity="0.4"/>
+  <circle cx="350" cy="280" r="30" fill="#E5E5E5" stroke="#D4D4D4" stroke-width="2"/>
+  <circle cx="450" cy="220" r="25" fill="#E5E5E5" stroke="#D4D4D4" stroke-width="2"/>
+  <text x="400" y="420" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="600" fill="#737373">Gesture Grammar</text>
+</svg>

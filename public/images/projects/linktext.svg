@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" fill="#F5F5F5"/>
+  <rect x="180" y="120" width="440" height="260" rx="12" fill="#E5E5E5"/>
+  <rect x="220" y="180" width="360" height="24" rx="4" fill="#D4D4D4"/>
+  <rect x="220" y="220" width="280" height="16" rx="4" fill="#D4D4D4"/>
+  <rect x="220" y="250" width="320" height="16" rx="4" fill="#D4D4D4"/>
+  <text x="400" y="420" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="600" fill="#737373">LinkText</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" fill="none">
+  <rect width="800" height="450" fill="#FAFAFA"/>
+  <rect x="200" y="80" width="180" height="120" rx="4" fill="#E5E5E5" stroke="#D4D4D4"/>
+  <rect x="420" y="80" width="180" height="120" rx="4" fill="#E5E5E5" stroke="#D4D4D4"/>
+  <rect x="310" y="240" width="180" height="120" rx="4" fill="#2563EB" opacity="0.15" stroke="#2563EB" stroke-width="1"/>
+  <text x="400" y="400" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="500" fill="#737373">Room-Scale UI Kit</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" fill="none">
+  <rect width="800" height="450" fill="#0A0A0A"/>
+  <polygon points="400,100 520,300 280,300" fill="none" stroke="#2563EB" stroke-width="2" opacity="0.6"/>
+  <polygon points="400,160 460,280 340,280" fill="#2563EB" opacity="0.2"/>
+  <circle cx="400" cy="220" r="30" fill="none" stroke="#737373" stroke-width="1"/>
+  <text x="400" y="380" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="500" fill="#737373">3D Visual Experiments</text>
+</svg>

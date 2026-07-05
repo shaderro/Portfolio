@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" fill="#F5F5F5"/>
+  <circle cx="400" cy="250" r="8" fill="#2563EB"/>
+  <circle cx="400" cy="250" r="80" fill="none" stroke="#2563EB" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
+  <rect x="300" y="160" width="200" height="120" rx="4" fill="#E5E5E5" stroke="#D4D4D4"/>
+  <text x="400" y="420" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="600" fill="#737373">Spatial Anchor</text>
+</svg>

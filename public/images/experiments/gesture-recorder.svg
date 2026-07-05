@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" fill="none">
+  <rect width="800" height="450" fill="#F5F5F5"/>
+  <rect x="250" y="100" width="300" height="200" rx="8" fill="#E5E5E5"/>
+  <path d="M350 200 L400 150 L450 200 L400 250 Z" fill="#2563EB" opacity="0.3"/>
+  <text x="400" y="380" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="500" fill="#737373">Gesture Recorder</text>
+</svg>
