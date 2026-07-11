@@ -23,7 +23,7 @@ const ERROR_COPY: Record<
   FETCH_FAILED: {
     title: "Unable to load content",
     description:
-      "Something went wrong while fetching this page. Please try again later.",
+      "Notion API is unreachable from this network. Run `npm run notion:warm-cache` while online (or on VPN), then reload the page.",
   },
 };
 

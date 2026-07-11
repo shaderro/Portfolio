@@ -20,6 +20,8 @@ export interface ProjectNode {
   summary?: string;
   /** When true, children are hidden behind an expand/collapse control */
   collapsible?: boolean;
+  /** When true, uses a custom page instead of Notion CMS */
+  standalone?: boolean;
   optional?: boolean;
   children?: ProjectNode[];
 }

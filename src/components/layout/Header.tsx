@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Container } from "./Container";
 
 export function Header() {
-  const { locale, setLocale } = useLanguage();
+  const { locale, setLocale, t } = useLanguage();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-white/90 backdrop-blur-sm">
@@ -15,9 +15,9 @@ export function Header() {
         <Link
           href="/"
           className="text-sm font-medium tracking-tight text-neutral-950 transition-opacity duration-200 hover:opacity-60"
-          aria-label={`${siteConfig.name} home`}
+          aria-label={`${t.hero.name} home`}
         >
-          {siteConfig.name}
+          {t.hero.name}
         </Link>
 
         <nav aria-label="Site links">

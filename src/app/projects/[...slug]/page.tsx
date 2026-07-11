@@ -6,9 +6,7 @@ import { ProjectFooter } from "@/components/layout/ProjectFooter";
 import { NotionContent } from "@/components/notion/NotionContent";
 import { NotionContentSkeleton } from "@/components/notion/NotionContentSkeleton";
 import { NotionContainer } from "@/components/notion/NotionContainer";
-import { getAllProjectPaths, getProjectByPath } from "@/lib/projects";
-import { getNotionPage } from "@/lib/notion";
-import { estimateReadingTime } from "@/lib/reading-time";
+import { getNotionProjectPaths, getProjectByPath } from "@/lib/projects";
 
 export const revalidate = 3600;
 
@@ -17,7 +15,7 @@ interface ProjectPageProps {
 }
 
 export async function generateStaticParams() {
-  return getAllProjectPaths().map((slug) => ({ slug }));
+  return getNotionProjectPaths().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -44,19 +42,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   if (!project) notFound();
 
-  let readingTime: number | undefined;
-  if (project.pageId) {
-    try {
-      const recordMap = await getNotionPage(project.pageId);
-      readingTime = estimateReadingTime(recordMap);
-    } catch {
-      readingTime = undefined;
-    }
-  }
-
   return (
     <article>
-      <ProjectHero project={project} readingTime={readingTime} />
+      <ProjectHero project={project} />
       <Suspense
         fallback={
           <NotionContainer>

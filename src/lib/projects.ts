@@ -35,6 +35,12 @@ export function getAllProjectPaths(): string[][] {
   return getAllProjects().map((project) => project.path);
 }
 
+export function getNotionProjectPaths(): string[][] {
+  return getAllProjects()
+    .filter((project) => !project.standalone)
+    .map((project) => project.path);
+}
+
 export function getProjectByPath(path: string[]): Project | undefined {
   return getAllProjects().find(
     (project) => project.path.join("/") === path.join("/"),

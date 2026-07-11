@@ -16,7 +16,7 @@ function DirectoryEntry({ item }: { item: IndexItem }) {
       <span className="text-base font-semibold text-neutral-950 group-hover:text-accent">
         {item.title}
       </span>
-      <span className="mt-0.5 block text-sm leading-snug text-neutral-500">
+      <span className="mt-0.5 block whitespace-pre-line text-sm leading-snug text-neutral-500">
         {item.description}
       </span>
     </Link>

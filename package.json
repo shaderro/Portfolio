@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "notion:sync": "npx tsx scripts/sync-notion-page-ids.ts"
+    "notion:sync": "npx tsx scripts/sync-notion-page-ids.ts",
+    "notion:warm-cache": "npx tsx scripts/test-notion-fetch.ts"
   },
   "dependencies": {
     "@babel/runtime": "^8.0.0",

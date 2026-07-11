@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 function killDevPorts() {
-  for (const port of [3000, 3001]) {
+  for (const port of [3000, 3001, 3002]) {
     try {
       if (process.platform === "win32") {
         const out = execSync(
@@ -46,10 +46,11 @@ if (existsSync(join(root, ".next"))) {
   console.log("Cleaned .next cache");
 }
 
-const child = spawn("npx", ["next", "dev"], {
+const nextCli = join(root, "node_modules", "next", "dist", "bin", "next");
+
+const child = spawn(process.execPath, [nextCli, "dev"], {
   cwd: root,
   stdio: "inherit",
-  shell: true,
 });
 
 child.on("exit", (code) => process.exit(code ?? 0));

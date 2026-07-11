@@ -125,31 +125,24 @@ export function NotionToc({ items }: NotionTocProps) {
 
   if (!mounted || items.length === 0) return null;
 
+  const h1Items = items.filter((item) => item.indentLevel === 0);
+  const visibleItems = isExpanded ? items : h1Items;
+
   return createPortal(
     <div
-      className={cn(
-        "fixed top-24 right-0 z-40 hidden lg:block",
-        isExpanded
-          ? "w-[calc(11rem+1.75rem)] xl:w-[calc(12rem+1.75rem)]"
-          : "w-[3.75rem]",
-      )}
+      className="fixed top-24 right-0 z-40 hidden w-[calc(11rem+1.75rem)] lg:block xl:w-[calc(12rem+1.75rem)]"
       onMouseEnter={handlePointerEnter}
       onMouseLeave={handlePointerLeave}
     >
       <div className="relative flex h-[calc(100vh-120px)] flex-row-reverse">
         <div
           aria-hidden="true"
-          className={cn(
-            "flex shrink-0 flex-col items-center pt-1",
-            isExpanded ? "w-7" : "w-[3.75rem]",
-          )}
+          className="flex w-7 shrink-0 flex-col items-center pt-1"
         >
           <List
             className={cn(
-              "transition-[color,width,height,margin] duration-200",
-              isExpanded
-                ? "h-4 w-4 text-neutral-400"
-                : "mr-1.5 h-[3.75rem] w-[3.75rem] text-neutral-300",
+              "h-4 w-4 transition-colors duration-200",
+              isExpanded ? "text-neutral-400" : "text-neutral-300",
             )}
             strokeWidth={1.75}
           />
@@ -157,21 +150,19 @@ export function NotionToc({ items }: NotionTocProps) {
 
         <nav
           aria-label="Table of contents"
-          className={cn(
-            "absolute top-0 right-7 w-44 xl:w-48",
-            "ease-out",
-            isExpanded
-              ? "pointer-events-auto translate-x-0 opacity-100"
-              : "pointer-events-none translate-x-2 opacity-0",
-          )}
-          style={{
-            transitionProperty: "opacity, transform",
-            transitionDuration: `${TRANSITION_MS}ms`,
-          }}
+          className="absolute top-0 right-7 w-44 xl:w-48"
         >
-          <p className="mb-3 text-right text-[11px] font-semibold tracking-[0.14em] text-neutral-400 uppercase">
-            Contents
-          </p>
+          {isExpanded && (
+            <p
+              className="mb-3 text-right text-[11px] font-semibold tracking-[0.14em] text-neutral-400 uppercase"
+              style={{
+                transitionProperty: "opacity",
+                transitionDuration: `${TRANSITION_MS}ms`,
+              }}
+            >
+              Contents
+            </p>
+          )}
           <div
             className={cn(
               "max-h-[calc(100vh-120px)] overflow-y-auto",
@@ -180,7 +171,7 @@ export function NotionToc({ items }: NotionTocProps) {
             )}
           >
             <ul className="m-0 list-none space-y-0.5 p-0">
-              {items.map((item) => {
+              {visibleItems.map((item) => {
                 const anchorId = uuidToId(item.id);
                 const isActive = activeId === anchorId;
 
@@ -188,17 +179,24 @@ export function NotionToc({ items }: NotionTocProps) {
                   <li key={item.id}>
                     <a
                       href={`#${anchorId}`}
+                      title={item.text}
                       onClick={(event) => {
                         event.preventDefault();
                         scrollToHeading(anchorId);
                         setActiveId(anchorId);
                       }}
                       className={cn(
-                        "block py-1 text-right leading-snug transition-colors duration-200",
-                        item.indentLevel === 0 ? "text-[13px]" : "text-[12px]",
-                        LEVEL_PADDING[item.indentLevel] ?? "pr-0",
+                        "block py-1 text-right leading-snug break-words whitespace-normal transition-colors duration-200",
+                        item.indentLevel === 0 && isExpanded && "text-[15px] font-semibold",
+                        item.indentLevel === 0 && !isExpanded && "text-[13px]",
+                        item.indentLevel > 0 && "text-[12px]",
+                        isExpanded
+                          ? (LEVEL_PADDING[item.indentLevel] ?? "pr-0")
+                          : "pr-0",
                         isActive
-                          ? "font-medium text-neutral-900"
+                          ? item.indentLevel === 0 && isExpanded
+                            ? "text-neutral-900"
+                            : "font-medium text-neutral-900"
                           : "text-neutral-500 hover:text-neutral-900",
                       )}
                     >

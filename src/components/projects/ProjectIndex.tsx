@@ -3,12 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
-import { Tag } from "@/components/ui/Tag";
 import { DirectoryList } from "@/components/projects/DirectoryList";
 import {
   INDEX_CONTENT,
   INDEX_GUTTER,
   INDEX_ROW,
+  INDEX_SECTION_TITLE,
   INDEX_TITLE,
 } from "@/components/projects/index-layout";
 import { cn } from "@/lib/utils";
@@ -20,12 +20,13 @@ interface ProjectIndexProps {
   labTitle?: string;
 }
 
+function formatIndexNumber(index: number) {
+  return String(index + 1).padStart(2, "0");
+}
+
 function TopLevelEntryLink({ item }: { item: IndexItem }) {
   return (
-    <Link
-      href={item.href}
-      className="group inline-flex flex-wrap items-baseline gap-x-3"
-    >
+    <Link href={item.href} className="group block">
       <span
         className={cn(
           INDEX_TITLE,
@@ -34,14 +35,17 @@ function TopLevelEntryLink({ item }: { item: IndexItem }) {
       >
         {item.title}
       </span>
-      {item.year && (
-        <span className="font-mono text-sm text-neutral-400">{item.year}</span>
-      )}
     </Link>
   );
 }
 
-function TopLevelSection({ item }: { item: IndexItem }) {
+function TopLevelSection({
+  item,
+  index,
+}: {
+  item: IndexItem;
+  index: number;
+}) {
   const [isExpanded, setIsExpanded] = useState(true);
   const hasChildren = (item.children?.length ?? 0) > 0;
   const showChildren = hasChildren && (!item.collapsible || isExpanded);
@@ -75,28 +79,24 @@ function TopLevelSection({ item }: { item: IndexItem }) {
         )}
 
         <div className={INDEX_CONTENT}>
-          <TopLevelEntryLink item={item} />
+          <p className="font-mono text-sm text-neutral-400">
+            {formatIndexNumber(index)}
+          </p>
 
-          {item.meta && (
-            <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-neutral-400">
-              {item.meta}
-            </p>
-          )}
+          <div className="mt-2">
+            {item.collapsible ? (
+              <p className={INDEX_SECTION_TITLE}>{item.title}</p>
+            ) : (
+              <TopLevelEntryLink item={item} />
+            )}
+          </div>
 
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-neutral-500">
+          <p className="mt-3 max-w-2xl whitespace-pre-line text-sm leading-relaxed text-neutral-500 md:text-base">
             {item.description}
           </p>
 
-          {item.tags.length > 0 && (
-            <div className="mt-2.5 flex flex-wrap gap-2">
-              {item.tags.map((tag) => (
-                <Tag key={tag}>{tag}</Tag>
-              ))}
-            </div>
-          )}
-
           {showChildren && item.children && (
-            <div className="mt-3">
+            <div className="mt-4">
               <DirectoryList items={item.children} />
             </div>
           )}
@@ -118,10 +118,10 @@ function LabSection({
       <div className={INDEX_ROW}>
         <span className={INDEX_GUTTER} aria-hidden="true" />
         <div className={INDEX_CONTENT}>
-          <h2 id="lab-heading" className={INDEX_TITLE}>
+          <h2 id="lab-heading" className={INDEX_SECTION_TITLE}>
             {title}
           </h2>
-          <div className="mt-3">
+          <div className="mt-4">
             <DirectoryList items={items} />
           </div>
         </div>
@@ -137,8 +137,8 @@ export function ProjectIndex({
 }: ProjectIndexProps) {
   return (
     <ul>
-      {sections.map((section) => (
-        <TopLevelSection key={section.href} item={section} />
+      {sections.map((section, index) => (
+        <TopLevelSection key={section.href} item={section} index={index} />
       ))}
       {labItems && labItems.length > 0 && (
         <LabSection items={labItems} title={labTitle} />

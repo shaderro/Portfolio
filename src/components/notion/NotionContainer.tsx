@@ -10,7 +10,7 @@ export function NotionContainer({
   return (
     <div
       className={cn(
-        "mx-auto w-full max-w-[820px] px-6 py-16 md:px-10 md:py-24",
+        "mx-auto w-full max-w-[820px] px-6 pb-12 md:px-10 md:pb-[4.5rem]",
         className,
       )}
       {...props}

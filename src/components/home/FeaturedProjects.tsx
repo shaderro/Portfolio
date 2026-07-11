@@ -1,8 +1,10 @@
 "use client";
 
+import { useMemo } from "react";
 import { ProjectIndex } from "@/components/projects/ProjectIndex";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Container } from "@/components/layout/Container";
+import { localizeIndexItems } from "@/lib/localize-index";
 import type { IndexItem } from "@/types/index";
 
 interface FeaturedProjectsProps {
@@ -11,26 +13,25 @@ interface FeaturedProjectsProps {
 }
 
 export function FeaturedProjects({ sections, labItems }: FeaturedProjectsProps) {
-  const { t } = useLanguage();
+  const { locale, t } = useLanguage();
+
+  const localizedSections = useMemo(
+    () => localizeIndexItems(sections, locale),
+    [sections, locale],
+  );
+
+  const localizedLabItems = useMemo(
+    () => localizeIndexItems(labItems, locale),
+    [labItems, locale],
+  );
 
   return (
-    <section
-      id="selected-work"
-      aria-labelledby="featured-heading"
-      className="border-t border-border pt-24 md:pt-32 lg:pt-40 pb-0"
-    >
+    <section id="selected-work" aria-label="Projects">
       <Container>
-        <h2
-          id="featured-heading"
-          className="font-mono text-xs uppercase tracking-widest text-muted"
-        >
-          {t.featured.title}
-        </h2>
-
-        <div className="mt-10" id="lab">
+        <div id="lab">
           <ProjectIndex
-            sections={sections}
-            labItems={labItems}
+            sections={localizedSections}
+            labItems={localizedLabItems}
             labTitle={t.lab.title}
           />
         </div>
