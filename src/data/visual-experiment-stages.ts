@@ -35,7 +35,7 @@ export const visualExperimentStages: ScrollStage[] = [
           type: "unity" as const,
           build: interactionDemo,
           title: "Unity 交互实验",
-          description: "在浏览器中体验空间交互原型。",
+          description: "移动鼠标体验交互",
         },
       ]
     : []),
@@ -44,8 +44,8 @@ export const visualExperimentStages: ScrollStage[] = [
         {
           type: "unity" as const,
           build: interactionDemo1,
-          title: "生成式视觉",
-          description: "参数化形态与实时渲染实验。",
+          title: "Unity 交互实验",
+          description: "按空格键跳跃，然后按wasd键移动",
         },
       ]
     : []),
@@ -54,8 +54,8 @@ export const visualExperimentStages: ScrollStage[] = [
         {
           type: "unity" as const,
           build: interactionDemo2,
-          title: "Offertory Box",
-          description: "空间交互与物理反馈实验。",
+          title: "Unity 交互实验",
+          description: "按空格键投掷骰子",
         },
       ]
     : []),

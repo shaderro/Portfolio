@@ -3,13 +3,15 @@ import type { ComponentPropsWithoutRef } from "react";
 
 interface ContainerProps extends ComponentPropsWithoutRef<"div"> {
   as?: "div" | "section" | "article";
-  size?: "default" | "narrow" | "wide" | "article";
+  size?: "default" | "narrow" | "wide" | "landing" | "article";
 }
 
 const sizeClasses = {
   default: "max-w-6xl",
   narrow: "max-w-3xl",
   wide: "max-w-7xl",
+  /** Homepage / brand landing (~1150px) */
+  landing: "max-w-[72rem]",
   article: "max-w-[820px]",
 } as const;
 

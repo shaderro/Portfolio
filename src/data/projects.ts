@@ -12,12 +12,12 @@ export const projectTree: ProjectNode[] = [
   {
     slug: "linktext",
     title: "LinkText",
-    subtitle: "AI Language Learning Platform",
+    subtitle: "AI-native Language Learning System",
     summary:
       "从阅读出发，构建 AI 驱动的语言学习体验，将碎片化内容转化为持续积累的知识。",
     description:
-      "从阅读出发，构建 AI 驱动的语言学习体验，\n将碎片化内容转化为持续积累的知识。",
-    tags: [],
+      "从阅读出发，构建 AI 驱动的语言学习体验，将碎片化内容转化为持续积累的知识。",
+    tags: ["AI Workflow", "Knowledge Structure", "Prompt Design", "LLM"],
     coverImage: "/images/projects/linktext.svg",
     coverAlt: "LinkText AI language learning app",
     pageId: "35f3e8e3610f80788222e6cd6fbf31e8",
@@ -38,7 +38,7 @@ export const projectTree: ProjectNode[] = [
     children: [
       {
         slug: "gesture-interaction",
-        title: "手势交互体系",
+        title: "手势快捷交互系统",
         description: "构建适用于空间界面的手势交互语言与输入模型。",
         tags: [],
         coverImage: "/images/projects/gesture-interaction.svg",
@@ -67,7 +67,7 @@ export const projectTree: ProjectNode[] = [
       },
       {
         slug: "spatial-anchor",
-        title: "Spatial Anchor",
+        title: "Spatial Anchor算法产品化探索",
         description:
           "探索空间锚点能力如何转化为用户可理解、可使用的产品体验。",
         tags: [],

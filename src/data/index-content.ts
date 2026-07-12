@@ -15,7 +15,7 @@ export const indexContent: Record<
         "围绕消费级 AR 眼镜，\n探索自然、高效且可规模化的空间交互体验。",
     },
     "/projects/xreal/gesture-interaction": {
-      title: "手势交互体系",
+      title: "手势快捷交互系统",
       description: "构建适用于空间界面的手势交互语言与输入模型。",
     },
     "/projects/xreal/gesture-interaction/quick-menu": {
@@ -27,6 +27,7 @@ export const indexContent: Record<
       description: "面向三维空间的窗口移动、缩放与旋转交互。",
     },
     "/projects/xreal/spatial-anchor": {
+      title: "Spatial Anchor算法产品化探索",
       description:
         "探索空间锚点能力如何转化为用户可理解、可使用的产品体验。",
     },
@@ -49,7 +50,7 @@ export const indexContent: Record<
         "Exploring natural, efficient, and scalable spatial interaction\nfor consumer AR glasses.",
     },
     "/projects/xreal/gesture-interaction": {
-      title: "Gesture Interaction System",
+      title: "手势快捷交互系统",
       description:
         "Building gesture interaction language and input models for spatial interfaces.",
     },
@@ -64,6 +65,7 @@ export const indexContent: Record<
         "Move, scale, and rotate windows in three-dimensional space.",
     },
     "/projects/xreal/spatial-anchor": {
+      title: "Spatial Anchor算法产品化探索",
       description:
         "Translating spatial anchor capabilities into product experiences users can understand and use.",
     },

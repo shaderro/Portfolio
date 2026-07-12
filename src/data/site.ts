@@ -3,7 +3,7 @@ export type Locale = "en" | "zh";
 export const siteConfig = {
   name: "周染心",
   description:
-    "产品设计师 / 独立开发者，专注于 AI 原生产品、交互系统与空间计算。",
+    "AI Product Designer / XR Product Designer。擅长从 0→1 定义产品形态，将复杂系统能力抽象为清晰的产品模型，并转化为自然、易理解、可落地的用户体验。",
   social: {
     email: "ranxin.zhou@example.com",
     github: "https://github.com/ranxinzhou",
@@ -15,12 +15,12 @@ export const homeContent = {
   en: {
     hero: {
       name: "Ranxin Zhou",
-      role: "Product Designer / Independent Developer",
+      role: "AI Product Designer / XR Product Designer",
       intro:
-        "Focused on AI-native products, interaction systems, and spatial computing.",
+        "Defines product form from 0→1, abstracts complex system capabilities into clear product models, and turns them into natural, understandable, and shippable user experiences.",
     },
     lab: {
-      title: "Lab",
+      title: "Research",
     },
     contact: {
       copyright: (year: number) => `© ${year} Ranxin Zhou`,
@@ -30,11 +30,12 @@ export const homeContent = {
   zh: {
     hero: {
       name: "周染心",
-      role: "产品设计师 / 独立开发者",
-      intro: "专注于 AI 原生产品、交互系统与空间计算。",
+      role: "AI Product Designer / XR Product Designer",
+      intro:
+        "擅长从 0→1 定义产品形态，将复杂系统能力抽象为清晰的产品模型，并转化为自然、易理解、可落地的用户体验。",
     },
     lab: {
-      title: "Lab",
+      title: "Research",
     },
     contact: {
       copyright: (year: number) => `© ${year} 周染心`,
@@ -42,28 +43,3 @@ export const homeContent = {
     toc: "目录",
   },
 } as const;
-
-export const featuredProjects = [
-  {
-    slug: "linktext",
-    subtitle: {
-      en: "AI Language Learning Platform",
-      zh: "AI 语言学习平台",
-    },
-    description: {
-      en: "Building AI-driven language learning from reading, turning fragmented content into accumulated knowledge.",
-      zh: "从阅读出发，构建 AI 驱动的语言学习体验，将碎片化内容转化为持续积累的知识。",
-    },
-  },
-  {
-    slug: "xreal",
-    subtitle: {
-      en: "XR Interaction Design",
-      zh: "XR 交互设计",
-    },
-    description: {
-      en: "Exploring natural, efficient, and scalable spatial interaction for consumer AR glasses.",
-      zh: "围绕消费级 AR 眼镜，探索自然、高效且可规模化的空间交互体验。",
-    },
-  },
-] as const;

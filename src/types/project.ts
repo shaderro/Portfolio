@@ -18,7 +18,7 @@ export interface ProjectNode {
   subtitle?: string;
   /** One-line summary for case study hero */
   summary?: string;
-  /** When true, children are hidden behind an expand/collapse control */
+  /** When true, top-level title is plain text (not a link), styled as a section heading */
   collapsible?: boolean;
   /** When true, uses a custom page instead of Notion CMS */
   standalone?: boolean;

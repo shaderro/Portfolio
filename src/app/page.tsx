@@ -1,17 +1,13 @@
 import { Hero } from "@/components/home/Hero";
-import { FeaturedProjects } from "@/components/home/FeaturedProjects";
+import { SelectedWorks } from "@/components/home/SelectedWorks";
 import { ContactSection } from "@/components/home/ContactSection";
-import { getLabIndexItems, getWorkIndexItems } from "@/lib/portfolio-index";
 
 export default function HomePage() {
-  const workSections = getWorkIndexItems();
-  const labItems = getLabIndexItems();
-
   return (
-    <>
+    <div className="flex min-h-[calc(100svh-3.5rem)] flex-col md:min-h-[calc(100svh-4rem)]">
       <Hero />
-      <FeaturedProjects sections={workSections} labItems={labItems} />
+      <SelectedWorks />
       <ContactSection />
-    </>
+    </div>
   );
 }

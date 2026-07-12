@@ -1,60 +1,29 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useMemo } from "react";
 import { homeContent, type Locale } from "@/data/site";
+
+/** Site is Chinese-only in the UI; English copy remains in data files for later use. */
+const ACTIVE_LOCALE: Locale = "zh";
 
 interface LanguageContextValue {
   locale: Locale;
-  setLocale: (locale: Locale) => void;
-  toggleLocale: () => void;
   t: (typeof homeContent)[Locale];
 }
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-const STORAGE_KEY = "portfolio-locale";
-
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("zh");
-  const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "en" || stored === "zh") {
-      setLocaleState(stored);
-    }
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
-    localStorage.setItem(STORAGE_KEY, locale);
-  }, [locale, mounted]);
-
-  const setLocale = useCallback((next: Locale) => {
-    setLocaleState(next);
-  }, []);
-
-  const toggleLocale = useCallback(() => {
-    setLocaleState((current) => (current === "en" ? "zh" : "en"));
+    document.documentElement.lang = "zh-CN";
   }, []);
 
   const value = useMemo(
     () => ({
-      locale,
-      setLocale,
-      toggleLocale,
-      t: homeContent[locale],
+      locale: ACTIVE_LOCALE,
+      t: homeContent[ACTIVE_LOCALE],
     }),
-    [locale, setLocale, toggleLocale],
+    [],
   );
 
   return (

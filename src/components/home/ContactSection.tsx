@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { siteConfig } from "@/data/site";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Container } from "@/components/layout/Container";
+
+const contactEmail = "ranxinzhou2000@gmail.com";
 
 export function ContactSection() {
   const { t } = useLanguage();
@@ -13,47 +13,28 @@ export function ContactSection() {
     <footer
       id="contact"
       aria-labelledby="contact-heading"
-      className="border-t border-border py-16 md:py-20"
+      className="shrink-0 border-t border-border py-4 md:py-5"
     >
-      <Container>
+      <Container size="landing">
         <h2 id="contact-heading" className="sr-only">
           Contact
         </h2>
 
-        <ul className="flex flex-wrap gap-x-8 gap-y-3">
-          <li>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+          <p className="text-sm text-neutral-500">
+            contact:{" "}
             <a
-              href={`mailto:${siteConfig.social.email}`}
-              className="text-sm text-neutral-500 transition-colors duration-200 hover:text-neutral-950"
+              href={`mailto:${contactEmail}`}
+              className="transition-colors duration-200 hover:text-neutral-950"
             >
-              Email
+              {contactEmail}
             </a>
-          </li>
-          <li>
-            <Link
-              href={siteConfig.social.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-neutral-500 transition-colors duration-200 hover:text-neutral-950"
-            >
-              GitHub
-            </Link>
-          </li>
-          <li>
-            <Link
-              href={siteConfig.social.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-neutral-500 transition-colors duration-200 hover:text-neutral-950"
-            >
-              LinkedIn
-            </Link>
-          </li>
-        </ul>
+          </p>
 
-        <p className="mt-10 font-mono text-xs text-neutral-400">
-          {t.contact.copyright(year)}
-        </p>
+          <p className="font-mono text-xs text-neutral-400">
+            {t.contact.copyright(year)}
+          </p>
+        </div>
       </Container>
     </footer>
   );
