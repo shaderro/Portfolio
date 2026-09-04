@@ -2,8 +2,7 @@
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Container } from "@/components/layout/Container";
-
-const contactEmail = "ranxinzhou2000@gmail.com";
+import { siteConfig } from "@/data/site";
 
 export function ContactSection() {
   const { t } = useLanguage();
@@ -22,12 +21,12 @@ export function ContactSection() {
 
         <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
           <p className="text-sm text-neutral-500">
-            contact:{" "}
+            {t.contact.label}:{" "}
             <a
-              href={`mailto:${contactEmail}`}
+              href={`mailto:${siteConfig.social.email}`}
               className="transition-colors duration-200 hover:text-neutral-950"
             >
-              {contactEmail}
+              {siteConfig.social.email}
             </a>
           </p>
 

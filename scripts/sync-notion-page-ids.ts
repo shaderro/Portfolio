@@ -9,18 +9,26 @@ import { join } from "path";
 /** Maps Notion page titles → site slugs (extend as your workspace grows) */
 const TITLE_TO_SLUG: Record<string, string> = {
   LinkText: "linktext",
+  "LinkText English": "linktext",
   XREAL: "xreal",
-  "手势快捷交互系统（New）": "xreal",
+  "手势快捷交互系统（New）": "gesture-interaction",
+  "手势快捷交互系统 (New)": "gesture-interaction",
+  "Gesture Interaction System (New)": "gesture-interaction",
   手势交互: "gesture-interaction",
   "手势快捷方案：全局菜单": "quick-menu",
-  "手势快捷方案：窗口调整": "window-resize",
+  "Gesture-Based Spatial Menu": "quick-menu",
+  "手势快捷方案：窗口调整": "input-model",
+  "Gesture Interaction Solution: Window Adjustment": "input-model",
   "Spatial Anchor": "spatial-anchor",
   "Spatial Anchor 算法产品化探索": "spatial-anchor",
+  "Spatial Anchor Productization Exploration": "spatial-anchor",
   其他贡献: "other-contributions",
   Lab: "lab",
   "AI Agent 商业模拟器": "ai-agent-simulator",
   "商学模拟器AI Agent": "ai-agent-simulator",
+  "Business Simulation AI Agent": "ai-agent-simulator",
   "3D Visual Experiments": "3d-visual-experiments",
+  "3D & Creative Coding": "3d-visual-experiments",
 };
 
 function loadEnvLocal(): Record<string, string> {

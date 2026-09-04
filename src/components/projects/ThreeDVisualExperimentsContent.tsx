@@ -7,10 +7,13 @@ import {
 } from "@/components/fullpage/FullPageContainer";
 import { SectionOverlay } from "@/components/fullpage/SectionOverlay";
 import { UnityBackgroundLayer } from "@/components/fullpage/UnityBackgroundLayer";
-import { visualExperimentStages } from "@/data/visual-experiment-stages";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { getVisualExperimentStages } from "@/data/visual-experiment-stages";
 
 export function ThreeDVisualExperimentsContent() {
-  const sectionCount = visualExperimentStages.length;
+  const { locale, t } = useLanguage();
+  const stages = getVisualExperimentStages(locale);
+  const sectionCount = stages.length;
 
   return (
     <div className="bg-black text-white">
@@ -19,17 +22,17 @@ export function ThreeDVisualExperimentsContent() {
           href="/#selected-work"
           className="pointer-events-auto inline-block text-sm text-neutral-400 transition-colors hover:text-white"
         >
-          ← Back
+          {t.ui.back}
         </Link>
         <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
-          3D Lab
+          {t.ui.labEyebrow}
         </p>
       </div>
 
       <FullPageContainer sectionCount={sectionCount}>
-        <UnityBackgroundLayer stages={visualExperimentStages} />
+        <UnityBackgroundLayer stages={stages} />
 
-        {visualExperimentStages.map((stage, index) => (
+        {stages.map((stage, index) => (
           <FullPageSection
             key={`${stage.type}-${index}`}
             index={index}

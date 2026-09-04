@@ -1,14 +1,30 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { ThreeDVisualExperimentsContent } from "@/components/projects/ThreeDVisualExperimentsContent";
-import { getProjectByPath } from "@/lib/projects";
+import { LOCALE_COOKIE, parseLocale } from "@/lib/locale";
+import {
+  getProjectByPath,
+  getProjectSummary,
+  getProjectTitle,
+} from "@/lib/projects";
 
 const path = ["lab", "3d-visual-experiments"];
 
-export const metadata: Metadata = {
-  title: "3D 交互与创意编程",
-  description: "围绕 Unity 与生成式视觉进行交互实验。",
-};
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const project = getProjectByPath(path);
+  if (!project) return {};
+
+  const cookieStore = await cookies();
+  const locale = parseLocale(cookieStore.get(LOCALE_COOKIE)?.value);
+
+  return {
+    title: getProjectTitle(project, locale),
+    description: getProjectSummary(project, locale),
+  };
+}
 
 export default function ThreeDVisualExperimentsPage() {
   const project = getProjectByPath(path);

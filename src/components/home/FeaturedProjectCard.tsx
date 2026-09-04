@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { landingContent } from "@/data/landing";
 
-const featured = landingContent.featured;
-
 export function FeaturedProjectCard() {
+  const { locale } = useLanguage();
+  const featured = landingContent[locale].featured;
+
   return (
     <section aria-labelledby="featured-heading" className="pb-4">
       <Link
@@ -11,7 +15,7 @@ export function FeaturedProjectCard() {
         className="group block rounded-lg border border-border bg-white px-6 py-5 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-neutral-400 hover:bg-neutral-50 md:px-8 md:py-6"
       >
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-neutral-400">
-          Featured Project
+          {featured.label}
         </p>
 
         <h2
