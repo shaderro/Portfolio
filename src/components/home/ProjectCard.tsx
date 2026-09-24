@@ -15,9 +15,6 @@ interface ProjectCardProps {
   className?: string;
 }
 
-const cardChrome =
-  "rounded-lg border border-border bg-white px-5 py-4 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-neutral-400 hover:bg-neutral-50 md:px-6 md:py-5";
-
 function ProjectCardEntry({ item }: { item: ProjectCardItem }) {
   return (
     <div>
@@ -25,25 +22,26 @@ function ProjectCardEntry({ item }: { item: ProjectCardItem }) {
         href={item.href}
         className="group/item block transition-colors duration-200"
       >
-        <span className="text-base font-medium leading-snug text-neutral-950 transition-colors duration-200 group-hover/item:text-neutral-600">
+        <span className="text-sm font-semibold leading-[21px] text-neutral-900 transition-colors duration-200 group-hover/item:text-neutral-600">
           {item.title}
         </span>
         {item.description && (
-          <span className="mt-0.5 block text-sm leading-snug text-neutral-500">
+          <span className="mt-1 block text-[13px] leading-[19.5px] text-neutral-500">
             {item.description}
           </span>
         )}
       </Link>
 
       {item.children && item.children.length > 0 && (
-        <ul className="mt-1.5 space-y-1 border-l border-neutral-200 pl-3">
+        <ul className="mt-2 space-y-1 border-l border-border pl-3">
           {item.children.map((child) => (
             <li key={child.href}>
               <Link
                 href={child.href}
-                className="block text-sm leading-snug text-neutral-500 transition-colors duration-200 hover:text-neutral-800"
+                className="inline-flex items-center gap-1 text-xs font-medium leading-[18px] text-neutral-900 transition-opacity duration-200 hover:opacity-60"
               >
                 {child.title}
+                <span aria-hidden="true">→</span>
               </Link>
             </li>
           ))}
@@ -60,20 +58,28 @@ export function ProjectCard({
   className,
 }: ProjectCardProps) {
   return (
-    <article className={cn(cardChrome, className)}>
-      <h3 className="text-[1.35rem] font-semibold leading-tight tracking-tight text-neutral-600 md:text-[1.5rem]">
+    <article
+      className={cn(
+        "rounded-xl border border-border bg-white p-6",
+        className,
+      )}
+    >
+      <h3 className="text-xl font-bold leading-[30px] tracking-[-0.025em] text-neutral-950">
         {title}
       </h3>
 
       {description && (
-        <p className="mt-2 text-base leading-snug text-neutral-500">
+        <p className="mt-1 text-[13px] leading-[21px] text-neutral-500">
           {description}
         </p>
       )}
 
-      <ul className={cn("space-y-2.5", description ? "mt-4" : "mt-3")}>
-        {items.map((item) => (
-          <li key={item.href}>
+      <ul className="mt-4">
+        {items.map((item, index) => (
+          <li
+            key={item.href}
+            className={cn(index > 0 && "mt-5 border-t border-border pt-5")}
+          >
             <ProjectCardEntry item={item} />
           </li>
         ))}

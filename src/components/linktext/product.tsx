@@ -86,8 +86,14 @@ export function TopNav({
   active,
 }: {
   className?: string;
-  active?: "reading" | "insights";
+  active?: "reading" | "insights" | "vocabulary";
 }) {
+  const items = [
+    { id: "reading" as const, label: "Reading" },
+    { id: "insights" as const, label: "Insights" },
+    { id: "vocabulary" as const, label: "Vocabulary" },
+  ];
+
   return (
     <nav
       className={cn(
@@ -107,32 +113,22 @@ export function TopNav({
         <div className="h-[18px] w-px bg-[var(--lt-border-default)]" />
       </div>
       <div className="flex items-center">
-        <span
-          className={cn(
-            "relative px-3 py-4 text-[13px] leading-5",
-            active === "reading"
-              ? "font-semibold text-[var(--lt-text-primary)]"
-              : "text-[var(--lt-text-tertiary)]",
-          )}
-        >
-          Reading
-          {active === "reading" ? (
-            <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-[1px] bg-[var(--lt-bg-brand)]" />
-          ) : null}
-        </span>
-        <span
-          className={cn(
-            "relative px-3 py-4 text-[13px] leading-5",
-            active === "insights"
-              ? "font-semibold text-[var(--lt-text-primary)]"
-              : "text-[var(--lt-text-tertiary)]",
-          )}
-        >
-          Insights
-          {active === "insights" ? (
-            <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-[1px] bg-[var(--lt-bg-brand)]" />
-          ) : null}
-        </span>
+        {items.map((item) => (
+          <span
+            key={item.id}
+            className={cn(
+              "relative px-3 py-4 text-[13px] leading-5",
+              active === item.id
+                ? "font-semibold text-[var(--lt-text-primary)]"
+                : "text-[var(--lt-text-tertiary)]",
+            )}
+          >
+            {item.label}
+            {active === item.id ? (
+              <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-[1px] bg-[var(--lt-bg-brand)]" />
+            ) : null}
+          </span>
+        ))}
       </div>
       <div className="min-w-px flex-1" />
       <div className="flex items-center gap-3">
@@ -200,11 +196,17 @@ export function MetadataRow({ className }: { className?: string }) {
   );
 }
 
-export function NavButton({ className }: { className?: string }) {
+export function NavButton({
+  className,
+  label = "Previous",
+}: {
+  className?: string;
+  label?: string;
+}) {
   return (
     <button
       type="button"
-      aria-label="Previous"
+      aria-label={label}
       className={cn(
         "flex size-12 shrink-0 items-center justify-center rounded-[24px] border border-[var(--lt-neutral-200)] bg-[var(--lt-neutral-50)]",
         className,

@@ -6,13 +6,23 @@ import { cn } from "@/lib/utils";
 import { TopNav } from "./product";
 
 const DURATION = 3.963;
-const BOOMERANG = {
-  duration: DURATION,
-  repeat: Infinity,
-  repeatType: "reverse" as const,
-};
 const LIST_EASE = ["linear", "easeInOut", "linear"] as const;
 const NOTE_EASE = ["linear", [0.45, 1.45, 0.807, 1.215], "linear"] as const;
+
+type LoopMode = "loop" | "boomerang";
+
+function timeline(loopMode: LoopMode) {
+  return loopMode === "boomerang"
+    ? {
+        duration: DURATION,
+        repeat: Infinity as const,
+        repeatType: "reverse" as const,
+      }
+    : {
+        duration: DURATION,
+        repeat: Infinity as const,
+      };
+}
 
 const ASSETS = {
   back: { src: "/images/linktext/motion/icon-back.svg", w: 14, h: 14 },
@@ -150,10 +160,12 @@ function MotionAsset({
 function AssistantLine({
   times,
   reduceMotion,
+  loopMode,
   children,
 }: {
   times: number[];
   reduceMotion: boolean;
+  loopMode: LoopMode;
   children: ReactNode;
 }) {
   return (
@@ -169,7 +181,7 @@ function AssistantLine({
         reduceMotion
           ? undefined
           : {
-              ...BOOMERANG,
+              ...timeline(loopMode),
               times,
               ease: LIST_EASE,
             }
@@ -182,8 +194,17 @@ function AssistantLine({
   );
 }
 
-export function ReadingMotion({ className }: { className?: string }) {
+export function ReadingMotion({
+  className,
+  loopMode = "boomerang",
+  showWhisper = true,
+}: {
+  className?: string;
+  loopMode?: LoopMode;
+  showWhisper?: boolean;
+}) {
   const reduceMotion = useReducedMotion();
+  const t = timeline(loopMode);
 
   return (
     <div
@@ -240,7 +261,7 @@ export function ReadingMotion({ className }: { className?: string }) {
                       reduceMotion
                         ? undefined
                         : {
-                            ...BOOMERANG,
+                            ...t,
                             times: [0, 0.3901, 0.4608, 1],
                             ease: NOTE_EASE,
                           }
@@ -288,15 +309,17 @@ export function ReadingMotion({ className }: { className?: string }) {
               </p>
             </div>
           </div>
-          <div className="pointer-events-none absolute right-0 top-[216px] flex items-center gap-1 pl-4">
-            <span className="size-1 shrink-0">
-              <MotionAsset name="whisperDot" />
-            </span>
-            <div className="w-[145px] text-[11px] font-medium leading-normal text-[#42c9b6]">
-              <p className="font-bold">unuberwindbaren</p>
-              <p>note added</p>
+          {showWhisper ? (
+            <div className="pointer-events-none absolute right-0 top-[216px] flex items-center gap-1 pl-4">
+              <span className="size-1 shrink-0">
+                <MotionAsset name="whisperDot" />
+              </span>
+              <div className="w-[145px] text-[11px] font-medium leading-normal text-[#42c9b6]">
+                <p className="font-bold">unuberwindbaren</p>
+                <p>note added</p>
+              </div>
             </div>
-          </div>
+          ) : null}
         </section>
 
         <aside className="flex h-full w-[513px] shrink-0 flex-col bg-[var(--lt-surface-card)]">
@@ -336,7 +359,7 @@ export function ReadingMotion({ className }: { className?: string }) {
                 reduceMotion
                   ? undefined
                   : {
-                      ...BOOMERANG,
+                      ...t,
                       times: [0, 0.2019, 0.2524, 1],
                       ease: ["linear", "easeInOut", "linear"],
                     }
@@ -354,7 +377,7 @@ export function ReadingMotion({ className }: { className?: string }) {
                   reduceMotion
                     ? undefined
                     : {
-                        ...BOOMERANG,
+                        ...t,
                         times: [0, 0.0883, 0.1766, 1],
                         ease: ["easeInOut", "easeInOut", "linear"],
                       }
@@ -374,7 +397,7 @@ export function ReadingMotion({ className }: { className?: string }) {
                   reduceMotion
                     ? undefined
                     : {
-                        ...BOOMERANG,
+                        ...t,
                         times: [0, 0.0505, 0.1388, 0.2271, 1],
                         ease: ["linear", "easeInOut", "easeInOut", "linear"],
                       }
@@ -394,7 +417,7 @@ export function ReadingMotion({ className }: { className?: string }) {
                   reduceMotion
                     ? undefined
                     : {
-                        ...BOOMERANG,
+                        ...t,
                         times: [0, 0.1009, 0.1893, 0.2776, 1],
                         ease: ["linear", "easeInOut", "easeInOut", "linear"],
                       }
@@ -409,6 +432,7 @@ export function ReadingMotion({ className }: { className?: string }) {
                   key={index}
                   times={line.times}
                   reduceMotion={Boolean(reduceMotion)}
+                  loopMode={loopMode}
                 >
                   {line.body}
                 </AssistantLine>

@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { ReadingMotion } from "./ReadingMotion";
 import { ReviewCard } from "./ReviewCard";
 import {
   ArticleCard,
@@ -119,10 +118,15 @@ function Swatch({
 
 export function DesignSystemPage() {
   return (
-    <div className="linktext bg-white text-[var(--lt-ink)]">
+    <div
+      className="linktext bg-white text-[var(--lt-ink)]"
+      id="design-system"
+      data-toc=""
+      data-id="design-system"
+    >
       <header className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-6 pt-16 pb-16 md:px-10 lg:px-[120px] lg:pt-[120px] lg:pb-16">
         <div className="flex flex-col gap-2">
-          <p className="text-[72px] leading-none font-black text-[#e6e6e6]">04</p>
+          <p className="text-[72px] leading-none font-black text-[#e6e6e6]">03</p>
           <h1 className="text-[36px] leading-none font-extrabold text-[var(--lt-ink)]">
             Design System
           </h1>
@@ -513,18 +517,6 @@ export function DesignSystemPage() {
                 </p>
                 <NavButton />
               </div>
-            </div>
-          </div>
-        </SpecCard>
-
-        <SpecCard>
-          <SpecHeader
-            title="Motion"
-            description="Reading view with Learning Assistant: an inline note pops in, the assistant typing indicator fades, then the reply staggers in. 3.96s boomerang loop from the design system file."
-          />
-          <div className="overflow-x-auto rounded-xl border border-[#eaeaed]">
-            <div className="h-[900px] min-w-[1440px]">
-              <ReadingMotion />
             </div>
           </div>
         </SpecCard>

@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Case01CoverPage } from "@/components/linktext/Case01CoverPage";
 import { DesignSystemPage } from "@/components/linktext/DesignSystemPage";
+import { InformationArchitecturePage } from "@/components/linktext/InformationArchitecturePage";
+import { ReadingExperiencePage } from "@/components/linktext/ReadingExperiencePage";
+import { ReviewPage } from "@/components/linktext/ReviewPage";
+import { FinalProductOverviewPage } from "@/components/linktext/FinalProductOverviewPage";
+import { SupportingExperiencesPage } from "@/components/linktext/SupportingExperiencesPage";
+import { CaseStudyToc } from "@/components/linktext/CaseStudyToc";
+import { designSystemToc } from "@/data/linktext-toc";
 import "@/styles/linktext.css";
 
 const inter = Inter({
@@ -19,7 +27,14 @@ export const metadata: Metadata = {
 export default function LinktextDesignSystemRoute() {
   return (
     <div className={`${inter.variable} ${inter.className}`}>
+      <Case01CoverPage />
+      <InformationArchitecturePage />
       <DesignSystemPage />
+      <ReadingExperiencePage />
+      <ReviewPage />
+      <SupportingExperiencesPage />
+      <FinalProductOverviewPage />
+      <CaseStudyToc items={designSystemToc} />
     </div>
   );
 }
