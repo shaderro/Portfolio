@@ -7,15 +7,25 @@ export interface ProjectNode {
   coverImage: string;
   coverAlt: string;
   /**
-   * Notion page ID (32-char hex, no dashes).
+   * Notion page ID (32-char hex, no dashes) — Chinese content.
    * Leave empty until connected — run `npm run notion:sync` to discover IDs.
    */
   pageId: string;
+  /** Notion page ID for English content. Falls back to pageId when missing. */
+  pageIdEn?: string;
   year?: string;
   /** Subtitle line shown under the title, e.g. "AI · PRODUCT DESIGN" */
   meta?: string;
   /** Editorial subtitle for case study hero */
   subtitle?: string;
+  /** English title for case study hero when locale is en */
+  titleEn?: string;
+  /** English one-line summary */
+  summaryEn?: string;
+  /** English description */
+  descriptionEn?: string;
+  /** English subtitle */
+  subtitleEn?: string;
   /** One-line summary for case study hero */
   summary?: string;
   /** When true, top-level title is plain text (not a link), styled as a section heading */

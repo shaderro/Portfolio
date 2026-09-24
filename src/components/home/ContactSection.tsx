@@ -1,40 +1,42 @@
 "use client";
 
+import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Container } from "@/components/layout/Container";
-
-const contactEmail = "ranxinzhou2000@gmail.com";
+import { LanguageToggle } from "@/components/layout/LanguageToggle";
 
 export function ContactSection() {
   const { t } = useLanguage();
-  const year = new Date().getFullYear();
 
   return (
     <footer
       id="contact"
-      aria-labelledby="contact-heading"
-      className="shrink-0 border-t border-border py-4 md:py-5"
+      className="border-t border-border py-8"
     >
-      <Container size="landing">
-        <h2 id="contact-heading" className="sr-only">
-          Contact
-        </h2>
+      <Container
+        size="landing"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p className="text-[13px] leading-[19.5px]">
+          <span className="font-medium text-neutral-900">{t.hero.name}</span>
+          <span className="ml-3 text-neutral-400">{t.hero.role}</span>
+        </p>
 
-        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-          <p className="text-sm text-neutral-500">
-            contact:{" "}
-            <a
-              href={`mailto:${contactEmail}`}
-              className="transition-colors duration-200 hover:text-neutral-950"
-            >
-              {contactEmail}
-            </a>
-          </p>
-
-          <p className="font-mono text-xs text-neutral-400">
-            {t.contact.copyright(year)}
-          </p>
-        </div>
+        <nav className="flex items-center gap-5" aria-label="Footer">
+          <Link
+            href="/#selected-work"
+            className="text-[13px] leading-[19.5px] text-neutral-400 transition-colors duration-200 hover:text-neutral-700"
+          >
+            {t.nav.work}
+          </Link>
+          <Link
+            href="/#about"
+            className="text-[13px] leading-[19.5px] text-neutral-400 transition-colors duration-200 hover:text-neutral-700"
+          >
+            {t.nav.about}
+          </Link>
+          <LanguageToggle />
+        </nav>
       </Container>
     </footer>
   );

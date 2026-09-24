@@ -1,5 +1,6 @@
 import type { UnityBuild } from "@/data/unity-builds";
 import { unityBuilds } from "@/data/unity-builds";
+import type { Locale } from "@/data/site";
 
 export type ScrollStage =
   | {
@@ -28,38 +29,79 @@ const interactionDemo2 = unityBuilds.find(
   (build) => build.id === "interaction-demo2",
 );
 
-export const visualExperimentStages: ScrollStage[] = [
-  ...(interactionDemo
-    ? [
-        {
-          type: "unity" as const,
-          build: interactionDemo,
-          title: "Unity 交互实验",
-          description: "移动鼠标体验交互",
-        },
-      ]
-    : []),
-  ...(interactionDemo1
-    ? [
-        {
-          type: "unity" as const,
-          build: interactionDemo1,
-          title: "Unity 交互实验",
-          description: "按空格键跳跃，然后按wasd键移动",
-        },
-      ]
-    : []),
-  ...(interactionDemo2
-    ? [
-        {
-          type: "unity" as const,
-          build: interactionDemo2,
-          title: "Unity 交互实验",
-          description: "按空格键投掷骰子",
-        },
-      ]
-    : []),
-];
+const stagesByLocale: Record<Locale, ScrollStage[]> = {
+  zh: [
+    ...(interactionDemo
+      ? [
+          {
+            type: "unity" as const,
+            build: interactionDemo,
+            title: "Unity 交互实验",
+            description: "移动鼠标体验交互",
+          },
+        ]
+      : []),
+    ...(interactionDemo1
+      ? [
+          {
+            type: "unity" as const,
+            build: interactionDemo1,
+            title: "Unity 交互实验",
+            description: "按空格键跳跃，然后按 wasd 键移动",
+          },
+        ]
+      : []),
+    ...(interactionDemo2
+      ? [
+          {
+            type: "unity" as const,
+            build: interactionDemo2,
+            title: "Unity 交互实验",
+            description: "按空格键投掷骰子",
+          },
+        ]
+      : []),
+  ],
+  en: [
+    ...(interactionDemo
+      ? [
+          {
+            type: "unity" as const,
+            build: interactionDemo,
+            title: "Unity Interaction Experiment",
+            description: "Move the mouse to interact",
+          },
+        ]
+      : []),
+    ...(interactionDemo1
+      ? [
+          {
+            type: "unity" as const,
+            build: interactionDemo1,
+            title: "Unity Interaction Experiment",
+            description: "Press Space to jump, then use WASD to move",
+          },
+        ]
+      : []),
+    ...(interactionDemo2
+      ? [
+          {
+            type: "unity" as const,
+            build: interactionDemo2,
+            title: "Unity Interaction Experiment",
+            description: "Press Space to throw the dice",
+          },
+        ]
+      : []),
+  ],
+};
+
+/** @deprecated Prefer getVisualExperimentStages(locale) */
+export const visualExperimentStages: ScrollStage[] = stagesByLocale.zh;
+
+export function getVisualExperimentStages(locale: Locale = "zh"): ScrollStage[] {
+  return stagesByLocale[locale];
+}
 
 /** Viewport height below the site header (h-14). */
 export const STAGE_HEIGHT_CLASS = "h-[calc(100svh-3.5rem)]";

@@ -1,0 +1,63 @@
+/* LinkText design tokens — scoped so they do not override portfolio theme. */
+.linktext {
+  --lt-brand-50: #eaf9f6;
+  --lt-brand-100: #c2efe7;
+  --lt-brand-200: #85ddd0;
+  --lt-brand-300: #42c9b6;
+  --lt-brand-400: #2db9a0;
+  --lt-brand-500: #229a85;
+  --lt-brand-600: #197a6a;
+  --lt-brand-700: #115b50;
+  --lt-brand-800: #0b3d36;
+  --lt-brand-900: #062019;
+
+  --lt-neutral-50: #fafafa;
+  --lt-neutral-100: #f4f4f6;
+  --lt-neutral-200: #eaeaed;
+  --lt-neutral-300: #d1d1d8;
+  --lt-neutral-400: #9898a6;
+  --lt-neutral-500: #717182;
+  --lt-neutral-600: #4b4b5a;
+  --lt-neutral-700: #2d2d3a;
+  --lt-neutral-800: #1a1a2a;
+  --lt-neutral-900: #0a0a14;
+
+  --lt-text-primary: var(--lt-neutral-800);
+  --lt-text-secondary: var(--lt-neutral-600);
+  --lt-text-tertiary: var(--lt-neutral-500);
+  --lt-text-muted: var(--lt-neutral-400);
+  --lt-text-brand: var(--lt-brand-400);
+  --lt-text-brand-hover: var(--lt-brand-500);
+  --lt-text-danger: #e05555;
+  --lt-text-inverse: #ffffff;
+  --lt-text-warning: #f59e0b;
+  --lt-status-danger: #b91c1c;
+  --lt-status-warning: #f59e0b;
+  --lt-status-success: #10b981;
+  --lt-ink: #121212;
+
+  --lt-bg-primary: #ffffff;
+  --lt-bg-brand: var(--lt-brand-400);
+  --lt-bg-brand-subtle: var(--lt-brand-50);
+  --lt-bg-warning-subtle: #fef3c7;
+  --lt-surface-card: #ffffff;
+  --lt-surface-nav: #ffffff;
+
+  --lt-border-default: var(--lt-neutral-200);
+  --lt-border-strong: var(--lt-neutral-300);
+  --lt-border-danger: #e05555;
+  --lt-border-brand: var(--lt-brand-400);
+
+  --lt-radius-code: 4px;
+  --lt-radius-input: 6px;
+  --lt-radius-card: 8px;
+  --lt-radius-button-md: 8px;
+  --lt-radius-container: 12px;
+  --lt-radius-badge: 9999px;
+
+  --lt-elevation-content:
+    0 1px 3px 0 #0000000f, 0 4px 20px 0 #00000012;
+
+  font-family: var(--font-linktext), Inter, ui-sans-serif, system-ui, sans-serif;
+  color: var(--lt-text-primary);
+}

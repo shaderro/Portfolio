@@ -10,22 +10,22 @@ export function Hero() {
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="shrink-0 pt-6 pb-5 md:pt-8 md:pb-6"
+      className="pt-16 pb-12 md:pt-20 md:pb-12"
     >
       <Container size="landing">
-        <div className="max-w-3xl">
+        <div className="max-w-[576px]">
           <h1
             id="hero-heading"
-            className="text-[2.25rem] font-semibold leading-none tracking-tight text-neutral-950 md:text-[2.75rem]"
+            className="text-[2.5rem] font-bold leading-none tracking-[-0.04em] text-neutral-950 md:text-[68px] md:tracking-[-1.7px]"
           >
             {t.hero.name}
           </h1>
 
-          <p className="mt-3 text-lg leading-snug text-neutral-500 md:text-xl">
+          <p className="mt-3 text-[15px] leading-[22.5px] text-neutral-500">
             {t.hero.role}
           </p>
 
-          <p className="mt-4 max-w-2xl text-base leading-snug text-neutral-600 md:text-lg">
+          <p className="mt-5 text-base leading-[26px] text-neutral-700">
             {t.hero.intro}
           </p>
         </div>

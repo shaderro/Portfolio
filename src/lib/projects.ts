@@ -1,4 +1,5 @@
 import { projectTree } from "@/data/projects";
+import type { Locale } from "@/data/site";
 import { normalizePageId } from "@/lib/notion-id";
 import type { Project, ProjectNode } from "@/types/project";
 
@@ -51,8 +52,50 @@ export function getProjectByPageId(pageId: string): Project | undefined {
   const normalized = normalizePageId(pageId);
   if (!normalized) return undefined;
   return getAllProjects().find(
-    (project) => normalizePageId(project.pageId) === normalized,
+    (project) =>
+      normalizePageId(project.pageId) === normalized ||
+      normalizePageId(project.pageIdEn ?? "") === normalized,
   );
+}
+
+export function getProjectPageId(
+  project: ProjectNode,
+  locale: Locale = "zh",
+): string {
+  if (locale === "en" && project.pageIdEn) {
+    return project.pageIdEn;
+  }
+  return project.pageId;
+}
+
+export function getProjectTitle(
+  project: ProjectNode,
+  locale: Locale = "zh",
+): string {
+  if (locale === "en" && project.titleEn) {
+    return project.titleEn;
+  }
+  return project.title;
+}
+
+export function getProjectDescription(
+  project: ProjectNode,
+  locale: Locale = "zh",
+): string {
+  if (locale === "en" && project.descriptionEn) {
+    return project.descriptionEn;
+  }
+  return project.description;
+}
+
+export function getProjectSummary(
+  project: ProjectNode,
+  locale: Locale = "zh",
+): string {
+  if (locale === "en") {
+    return project.summaryEn ?? project.descriptionEn ?? project.summary ?? project.description;
+  }
+  return project.summary ?? project.description;
 }
 
 export function getProjectHref(path: string[]): string {

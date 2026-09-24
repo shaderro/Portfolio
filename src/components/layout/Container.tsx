@@ -10,8 +10,8 @@ const sizeClasses = {
   default: "max-w-6xl",
   narrow: "max-w-3xl",
   wide: "max-w-7xl",
-  /** Homepage / brand landing (~1150px) */
-  landing: "max-w-[72rem]",
+  /** Homepage / brand landing (Figma 1100px) */
+  landing: "max-w-[1100px]",
   article: "max-w-[820px]",
 } as const;
 

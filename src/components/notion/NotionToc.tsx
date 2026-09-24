@@ -1,90 +1,143 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { List } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { uuidToId } from "notion-utils";
 import type { NotionTocItem } from "@/types/notion-toc";
 import { cn } from "@/lib/utils";
 
 const HEADER_OFFSET = 96;
-const COLLAPSE_DELAY_MS = 275;
-const TRANSITION_MS = 200;
+const DEFAULT_HEADING_SELECTOR = ".notion-page .notion-h[data-id]";
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+const EASE_IN_OUT = [0.25, 0.1, 0.25, 1] as const;
+const EXPAND_S = 0.36;
+const HOVER_GRACE_MS = 220;
 
-const LEVEL_PADDING: Record<number, string> = {
-  0: "pr-0",
-  1: "pr-3",
-  2: "pr-6",
-  3: "pr-9",
+type TocGroup = {
+  item: NotionTocItem;
+  children: NotionTocItem[];
 };
 
 interface NotionTocProps {
   items: NotionTocItem[];
+  headingSelector?: string;
+  getAnchorId?: (item: NotionTocItem) => string;
 }
 
-function getHeadingElements(): HTMLElement[] {
-  return [
-    ...document.querySelectorAll<HTMLElement>(
-      ".notion-page .notion-h[data-id]",
-    ),
-  ];
+function defaultGetAnchorId(item: NotionTocItem) {
+  return uuidToId(item.id);
 }
 
-function scrollToHeading(anchorId: string) {
-  const target =
+function getHeadingElements(selector: string): HTMLElement[] {
+  return [...document.querySelectorAll<HTMLElement>(selector)];
+}
+
+function headingAnchorId(heading: HTMLElement) {
+  return heading.dataset.id || heading.id;
+}
+
+function findHeading(anchorId: string, headingSelector: string) {
+  return (
     document.getElementById(anchorId) ??
     document.querySelector<HTMLElement>(
-      `.notion-page .notion-h[data-id="${anchorId}"]`,
-    );
+      `${headingSelector}[data-id="${anchorId}"]`,
+    )
+  );
+}
 
+function scrollToHeading(anchorId: string, headingSelector: string) {
+  const target = findHeading(anchorId, headingSelector);
   if (!target) return;
 
-  const top = target.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
-  window.scrollTo({ top, behavior: "smooth" });
+  target.style.scrollMarginTop = `${HEADER_OFFSET}px`;
+
+  const top = Math.max(
+    0,
+    window.scrollY + target.getBoundingClientRect().top - HEADER_OFFSET,
+  );
+  const html = document.documentElement;
+  const root = document.scrollingElement ?? html;
+
+  html.style.scrollBehavior = "auto";
+  root.scrollTop = top;
+  html.style.scrollBehavior = "";
+
   window.history.replaceState(null, "", `#${anchorId}`);
 }
 
-export function NotionToc({ items }: NotionTocProps) {
+function groupTocItems(items: NotionTocItem[]): TocGroup[] {
+  const groups: TocGroup[] = [];
+
+  for (const item of items) {
+    if (item.indentLevel === 0 || groups.length === 0) {
+      groups.push({ item, children: [] });
+      continue;
+    }
+    groups[groups.length - 1]!.children.push(item);
+  }
+
+  return groups;
+}
+
+export function NotionToc({
+  items,
+  headingSelector = DEFAULT_HEADING_SELECTOR,
+  getAnchorId = defaultGetAnchorId,
+}: NotionTocProps) {
+  const reduceMotion = Boolean(useReducedMotion());
   const [mounted, setMounted] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const collapseTimerRef = useRef<number | null>(null);
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [hoverId, setHoverId] = useState<string | null>(null);
+  const pinnedRef = useRef(false);
+  const openIdRef = useRef<string | null>(null);
+  const hoverTimerRef = useRef<number>(0);
+  openIdRef.current = openId;
 
-  const clearCollapseTimer = useCallback(() => {
-    if (collapseTimerRef.current !== null) {
-      window.clearTimeout(collapseTimerRef.current);
-      collapseTimerRef.current = null;
-    }
-  }, []);
+  const groups = useMemo(() => groupTocItems(items), [items]);
 
-  const handlePointerEnter = useCallback(() => {
-    clearCollapseTimer();
-    setIsExpanded(true);
-  }, [clearCollapseTimer]);
-
-  const handlePointerLeave = useCallback(() => {
-    clearCollapseTimer();
-    collapseTimerRef.current = window.setTimeout(() => {
-      setIsExpanded(false);
-      collapseTimerRef.current = null;
-    }, COLLAPSE_DELAY_MS);
-  }, [clearCollapseTimer]);
+  const parentIdOf = useCallback(
+    (anchorId: string | null) => {
+      if (!anchorId) return null;
+      let current: string | null = null;
+      for (const item of items) {
+        const id = getAnchorId(item);
+        if (item.indentLevel === 0) current = id;
+        if (id === anchorId) return current ?? id;
+      }
+      return current;
+    },
+    [getAnchorId, items],
+  );
 
   useEffect(() => {
     setMounted(true);
+    return () => window.clearTimeout(hoverTimerRef.current);
+  }, []);
+
+  const hoverGroup = useCallback((id: string | null) => {
+    window.clearTimeout(hoverTimerRef.current);
+    if (id !== null) {
+      setHoverId(id);
+      return;
+    }
+    hoverTimerRef.current = window.setTimeout(() => {
+      setHoverId(null);
+    }, HOVER_GRACE_MS);
   }, []);
 
   useEffect(() => {
     if (!mounted || items.length === 0) return;
 
     const syncActive = () => {
-      const headings = getHeadingElements();
+      const headings = getHeadingElements(headingSelector);
       if (headings.length === 0) return;
 
-      let current = headings[0]?.dataset.id ?? null;
+      let current = headingAnchorId(headings[0]!) || null;
 
       for (const heading of headings) {
-        const id = heading.dataset.id;
+        const id = headingAnchorId(heading);
         if (!id) continue;
         if (heading.getBoundingClientRect().top <= HEADER_OFFSET + 8) {
           current = id;
@@ -94,6 +147,12 @@ export function NotionToc({ items }: NotionTocProps) {
       }
 
       setActiveId(current);
+      const parent = parentIdOf(current);
+      if (!parent) return;
+      if (pinnedRef.current && openIdRef.current && openIdRef.current !== parent) {
+        pinnedRef.current = false;
+      }
+      if (!pinnedRef.current) setOpenId(parent);
     };
 
     const timer = window.setTimeout(syncActive, 400);
@@ -103,113 +162,187 @@ export function NotionToc({ items }: NotionTocProps) {
       window.clearTimeout(timer);
       window.removeEventListener("scroll", syncActive);
     };
-  }, [mounted, items]);
+  }, [mounted, items, headingSelector, parentIdOf]);
 
-  useEffect(() => {
-    if (!isExpanded) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        clearCollapseTimer();
-        setIsExpanded(false);
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isExpanded, clearCollapseTimer]);
-
-  useEffect(() => {
-    return () => clearCollapseTimer();
-  }, [clearCollapseTimer]);
+  const goTo = useCallback(
+    (anchorId: string) => {
+      setActiveId(anchorId);
+      scrollToHeading(anchorId, headingSelector);
+    },
+    [headingSelector],
+  );
 
   if (!mounted || items.length === 0) return null;
 
-  const h1Items = items.filter((item) => item.indentLevel === 0);
-  const visibleItems = isExpanded ? items : h1Items;
+  const duration = reduceMotion ? 0 : EXPAND_S;
+
+  const tocWidth = 260;
+  const tocScale = 2 / 3;
 
   return createPortal(
-    <div
-      className="fixed top-24 right-0 z-40 hidden w-[calc(11rem+1.75rem)] lg:block xl:w-[calc(12rem+1.75rem)]"
-      onMouseEnter={handlePointerEnter}
-      onMouseLeave={handlePointerLeave}
+    <nav
+      aria-label="Table of contents"
+      className="pointer-events-none fixed top-24 right-2 z-40 hidden font-sans lg:block"
+      style={{ width: tocWidth * tocScale }}
     >
-      <div className="relative flex h-[calc(100vh-120px)] flex-row-reverse">
+      <div
+        className="pointer-events-auto origin-top-right"
+        style={{
+          width: tocWidth,
+          transform: `scale(${tocScale})`,
+          marginLeft: -(tocWidth * (1 - tocScale)),
+        }}
+        onMouseEnter={() => window.clearTimeout(hoverTimerRef.current)}
+        onMouseLeave={() => hoverGroup(null)}
+      >
         <div
-          aria-hidden="true"
-          className="flex w-7 shrink-0 flex-col items-center pt-1"
-        >
-          <List
-            className={cn(
-              "h-4 w-4 transition-colors duration-200",
-              isExpanded ? "text-neutral-400" : "text-neutral-300",
-            )}
-            strokeWidth={1.75}
-          />
-        </div>
-
-        <nav
-          aria-label="Table of contents"
-          className="absolute top-0 right-7 w-44 xl:w-48"
-        >
-          {isExpanded && (
-            <p
-              className="mb-3 text-right text-[11px] font-semibold tracking-[0.14em] text-neutral-400 uppercase"
-              style={{
-                transitionProperty: "opacity",
-                transitionDuration: `${TRANSITION_MS}ms`,
-              }}
-            >
-              Contents
-            </p>
+          className={cn(
+            "overflow-y-auto",
+            "[scrollbar-width:none] [-ms-overflow-style:none]",
+            "[&::-webkit-scrollbar]:hidden",
           )}
-          <div
-            className={cn(
-              "max-h-[calc(100vh-120px)] overflow-y-auto",
-              "[scrollbar-width:none] [-ms-overflow-style:none]",
-              "[&::-webkit-scrollbar]:hidden",
-            )}
-          >
-            <ul className="m-0 list-none space-y-0.5 p-0">
-              {visibleItems.map((item) => {
-                const anchorId = uuidToId(item.id);
-                const isActive = activeId === anchorId;
+          style={{ maxHeight: `calc((100vh - 140px) / ${tocScale})` }}
+        >
+        <ul className="pointer-events-auto m-0 list-none p-0">
+          {groups.map((group) => {
+            const groupId = getAnchorId(group.item);
+            const hasChildren = group.children.length > 0;
+            const isOpen =
+              hasChildren && (hoverId === groupId || (!hoverId && openId === groupId));
+            const isTitleActive = activeId === groupId;
 
-                return (
-                  <li key={item.id}>
-                    <a
-                      href={`#${anchorId}`}
-                      title={item.text}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        scrollToHeading(anchorId);
-                        setActiveId(anchorId);
+            return (
+              <li
+                key={group.item.id}
+                className="text-right"
+                onMouseEnter={() => hoverGroup(groupId)}
+              >
+                <div className="flex items-center justify-end gap-1 py-1">
+                  <a
+                    href={`#${groupId}`}
+                    title={group.item.text}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      pinnedRef.current = false;
+                      if (hasChildren) setOpenId(groupId);
+                      goTo(groupId);
+                    }}
+                    className={cn(
+                      "min-w-0 flex-1 cursor-pointer text-right text-[17px] font-bold leading-tight break-words transition-colors duration-200",
+                      isTitleActive ? "text-neutral-900" : "text-neutral-400",
+                    )}
+                    style={{ fontWeight: 700 }}
+                  >
+                    {group.item.text}
+                  </a>
+
+                  {hasChildren ? (
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-label={
+                        isOpen
+                          ? `Collapse ${group.item.text}`
+                          : `Expand ${group.item.text}`
+                      }
+                      onClick={() => {
+                        const next = isOpen ? null : groupId;
+                        pinnedRef.current = next !== parentIdOf(activeId);
+                        setOpenId(next);
                       }}
-                      className={cn(
-                        "block py-1 text-right leading-snug break-words whitespace-normal transition-colors duration-200",
-                        item.indentLevel === 0 && isExpanded && "text-[15px] font-semibold",
-                        item.indentLevel === 0 && !isExpanded && "text-[13px]",
-                        item.indentLevel > 0 && "text-[12px]",
-                        isExpanded
-                          ? (LEVEL_PADDING[item.indentLevel] ?? "pr-0")
-                          : "pr-0",
-                        isActive
-                          ? item.indentLevel === 0 && isExpanded
-                            ? "text-neutral-900"
-                            : "font-medium text-neutral-900"
-                          : "text-neutral-500 hover:text-neutral-900",
-                      )}
+                      className="shrink-0 cursor-pointer p-0.5 text-[12px] leading-none text-neutral-400"
                     >
-                      {item.text}
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </nav>
+                      <motion.span
+                        className="inline-block"
+                        animate={{ rotate: isOpen ? 0 : -90 }}
+                        transition={{ duration, ease: EASE_OUT }}
+                      >
+                        ▾
+                      </motion.span>
+                    </button>
+                  ) : (
+                    <span
+                      aria-hidden="true"
+                      className="shrink-0 text-[14px] leading-none text-neutral-400"
+                    >
+                      ›
+                    </span>
+                  )}
+                </div>
+
+                {hasChildren ? (
+                  <motion.div
+                    initial={false}
+                    animate={
+                      isOpen
+                        ? { height: "auto", opacity: 1 }
+                        : { height: 0, opacity: 0 }
+                    }
+                    transition={{
+                      height: { duration, ease: EASE_OUT },
+                      opacity: {
+                        duration: reduceMotion ? 0 : isOpen ? 0.28 : 0.2,
+                        ease: EASE_IN_OUT,
+                      },
+                    }}
+                    className="overflow-hidden"
+                    style={{ pointerEvents: isOpen ? "auto" : "none" }}
+                    aria-hidden={!isOpen}
+                    inert={isOpen ? undefined : true}
+                  >
+                    <ul className="m-0 flex list-none flex-col items-end gap-0.5 pt-0.5 pb-1 pr-4">
+                      {group.children.map((child) => {
+                        const childId = getAnchorId(child);
+                        const isChildActive = activeId === childId;
+
+                        return (
+                          <li key={child.id} className="w-full">
+                            <motion.div
+                              initial={false}
+                              animate={
+                                isOpen
+                                  ? { opacity: 1, y: 0 }
+                                  : { opacity: 0, y: -10 }
+                              }
+                              transition={{
+                                duration: reduceMotion ? 0 : 0.28,
+                                delay: 0,
+                                ease: isOpen ? EASE_OUT : EASE_IN_OUT,
+                              }}
+                            >
+                              <a
+                                href={`#${childId}`}
+                                title={child.text}
+                                onClick={(event) => {
+                                  event.preventDefault();
+                                  pinnedRef.current = false;
+                                  setOpenId(groupId);
+                                  goTo(childId);
+                                }}
+                                className={cn(
+                                  "relative z-[1] block w-full cursor-pointer text-right text-[16.875px] font-normal leading-tight break-words transition-colors duration-200",
+                                  child.indentLevel > 1 && "pr-2",
+                                  isChildActive
+                                    ? "text-neutral-900"
+                                    : "text-neutral-400",
+                                )}
+                              >
+                                {child.text}
+                              </a>
+                            </motion.div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </motion.div>
+                ) : null}
+              </li>
+            );
+          })}
+        </ul>
+        </div>
       </div>
-    </div>,
+    </nav>,
     document.body,
   );
 }

@@ -1,0 +1,8 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="10" height="28" viewBox="0 0 10 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame">
+<line id="Line" x1="5.5" x2="5.5" y2="20" stroke="#333333"/>
+<g id="arrow-down">
+<path id="Vector" d="M5 23.2498V26.7502M2.083 25L5 26.7502L7.917 25" stroke="#333333" stroke-width="2" stroke-linecap="round"/>
+</g>
+</g>
+</svg>

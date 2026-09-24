@@ -21,6 +21,11 @@
     font-feature-settings: "kern" 1, "liga" 1;
   }
 
+  [data-toc],
+  .notion-h[data-id] {
+    scroll-margin-top: 96px;
+  }
+
   ::selection {
     @apply bg-neutral-200 text-neutral-950;
   }

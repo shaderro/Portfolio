@@ -1,29 +1,62 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useRouter } from "next/navigation";
 import { homeContent, type Locale } from "@/data/site";
-
-/** Site is Chinese-only in the UI; English copy remains in data files for later use. */
-const ACTIVE_LOCALE: Locale = "zh";
+import { LOCALE_COOKIE, localeToHtmlLang } from "@/lib/locale";
 
 interface LanguageContextValue {
   locale: Locale;
+  setLocale: (locale: Locale) => void;
   t: (typeof homeContent)[Locale];
 }
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
+function persistLocale(locale: Locale) {
+  document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=31536000; samesite=lax`;
+  localStorage.setItem(LOCALE_COOKIE, locale);
+  document.documentElement.lang = localeToHtmlLang(locale);
+}
+
+export function LanguageProvider({
+  children,
+  initialLocale = "zh",
+}: {
+  children: React.ReactNode;
+  initialLocale?: Locale;
+}) {
+  const router = useRouter();
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
+
   useEffect(() => {
-    document.documentElement.lang = "zh-CN";
-  }, []);
+    persistLocale(locale);
+  }, [locale]);
+
+  const setLocale = useCallback(
+    (next: Locale) => {
+      if (next === locale) return;
+      setLocaleState(next);
+      persistLocale(next);
+      router.refresh();
+    },
+    [locale, router],
+  );
 
   const value = useMemo(
     () => ({
-      locale: ACTIVE_LOCALE,
-      t: homeContent[ACTIVE_LOCALE],
+      locale,
+      setLocale,
+      t: homeContent[locale],
     }),
-    [],
+    [locale, setLocale],
   );
 
   return (
