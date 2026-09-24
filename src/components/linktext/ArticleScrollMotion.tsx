@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { ease, tr, type Bezier } from "./fm";
 
 const STAGE_W = 401;
 const STAGE_H = 844;
 const DURATION = 10.648;
-const LOOP = { duration: DURATION, repeat: Infinity } as const;
-const EASE_OUT = [0.22, 1, 0.36, 1] as const;
-const EASE_SCROLL = [0.4, 0, 0.2, 1] as const;
+const LOOP = { duration: DURATION, repeat: Infinity };
+const EASE_OUT: Bezier = [0.22, 1, 0.36, 1];
+const EASE_SCROLL: Bezier = [0.4, 0, 0.2, 1];
 const HIGHLIGHT = "#85DDD0";
 
 const ICONS = {
@@ -54,17 +55,17 @@ function ArticleBody({ className }: { className?: string }) {
   );
 }
 
-const scrollTransition = {
+const scrollTransition = tr({
   ...LOOP,
   times: [0, 0.047, 0.1972, 1],
-  ease: ["linear", EASE_SCROLL, "linear"],
-} as const;
+  ease: ease("linear", EASE_SCROLL, "linear"),
+});
 
-const highlightFade = {
+const highlightFade = tr({
   ...LOOP,
   times: [0, 0.2629, 0.263, 0.3381, 0.3991, 0.3992],
-  ease: ["linear", "linear", EASE_OUT, "linear", "linear"],
-} as const;
+  ease: ease("linear", "linear", EASE_OUT, "linear", "linear"),
+});
 
 export function ArticleScrollMotion() {
   const reduceMotion = Boolean(useReducedMotion());

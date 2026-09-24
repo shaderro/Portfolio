@@ -3,11 +3,13 @@
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { ease, tr, type Bezier } from "./fm";
 import { TopNav } from "./product";
 
 const DURATION = 3.963;
-const LIST_EASE = ["linear", "easeInOut", "linear"] as const;
-const NOTE_EASE = ["linear", [0.45, 1.45, 0.807, 1.215], "linear"] as const;
+const LIST_EASE = ease("linear", "easeInOut", "linear");
+const NOTE_BEZIER: Bezier = [0.45, 1.45, 0.807, 1.215];
+const NOTE_EASE = ease("linear", NOTE_BEZIER, "linear");
 
 type LoopMode = "loop" | "boomerang";
 
@@ -15,12 +17,12 @@ function timeline(loopMode: LoopMode) {
   return loopMode === "boomerang"
     ? {
         duration: DURATION,
-        repeat: Infinity as const,
+        repeat: Infinity,
         repeatType: "reverse" as const,
       }
     : {
         duration: DURATION,
-        repeat: Infinity as const,
+        repeat: Infinity,
       };
 }
 
@@ -180,11 +182,11 @@ function AssistantLine({
       transition={
         reduceMotion
           ? undefined
-          : {
+          : tr({
               ...timeline(loopMode),
               times,
               ease: LIST_EASE,
-            }
+            })
       }
     >
       <p className="text-[13px] font-medium leading-5 text-[var(--lt-neutral-800)]">
@@ -260,11 +262,11 @@ export function ReadingMotion({
                     transition={
                       reduceMotion
                         ? undefined
-                        : {
+                        : tr({
                             ...t,
                             times: [0, 0.3901, 0.4608, 1],
                             ease: NOTE_EASE,
-                          }
+                          })
                     }
                   >
                     <MotionAsset name="noteDot" />

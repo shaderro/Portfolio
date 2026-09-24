@@ -1,7 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
+import type { Easing } from "framer-motion";
 import { motion, useReducedMotion } from "framer-motion";
+import { ease, tr } from "./fm";
 import { ReadingMotion } from "./ReadingMotion";
 import { GrammarReviewMotion } from "./ReviewMotion";
 import { ScaledStage } from "./ScaledStage";
@@ -32,7 +34,7 @@ const SHOTS = {
 } as const;
 
 function loop(duration: number) {
-  return { duration, repeat: Infinity as const };
+  return { duration, repeat: Infinity };
 }
 
 function Stage({ children }: { children: ReactNode }) {
@@ -52,7 +54,7 @@ function Shot({
   opacity,
   times,
   duration,
-  ease,
+  ease: easeOption,
 }: {
   name: keyof typeof SHOTS;
   className?: string;
@@ -60,7 +62,7 @@ function Shot({
   opacity: number[];
   times: number[];
   duration: number;
-  ease?: string | string[];
+  ease?: Easing | Easing[];
 }) {
   const shot = SHOTS[name];
   return (
@@ -75,13 +77,13 @@ function Shot({
       transition={
         reduceMotion
           ? undefined
-          : {
+          : tr({
               opacity: {
                 ...loop(duration),
                 times,
-                ease: ease ?? "linear",
+                ease: easeOption ?? "linear",
               },
-            }
+            })
       }
     />
   );
@@ -116,7 +118,7 @@ function LibraryToReading({ reduceMotion }: { reduceMotion: boolean }) {
 function GrammarReviewSequence({ reduceMotion }: { reduceMotion: boolean }) {
   const fade = {
     times: [0, 0.1395, 0.1802, 1],
-    ease: ["linear", "easeInOut", "linear"] as const,
+    ease: ease("linear", "easeInOut", "linear"),
   };
 
   return (
@@ -126,7 +128,7 @@ function GrammarReviewSequence({ reduceMotion }: { reduceMotion: boolean }) {
           className="absolute inset-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 0, 1, 1] }}
-          transition={{ opacity: { ...loop(REVIEW_MS), ...fade } }}
+          transition={tr({ opacity: { ...loop(REVIEW_MS), ...fade } })}
         >
           <GrammarReviewMotion framed={false} />
         </motion.div>

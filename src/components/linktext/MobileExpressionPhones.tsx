@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { ease, tr } from "./fm";
 
 const STAGE_W = 400;
 const STAGE_H = 844;
 const DURATION = 6.4;
 const VOCAB_DURATION = 4.2;
-const LOOP = { duration: DURATION, repeat: Infinity } as const;
-const VOCAB_LOOP = { duration: VOCAB_DURATION, repeat: Infinity } as const;
+const LOOP = { duration: DURATION, repeat: Infinity };
+const VOCAB_LOOP = { duration: VOCAB_DURATION, repeat: Infinity };
 const ICONS = {
   back: "/images/linktext/mobile/expression/icon-back.svg",
   speaker: "/images/linktext/mobile/expression/icon-speaker.svg",
@@ -364,14 +365,8 @@ function NavCircle({
 
 export function VocabDetailPhone() {
   const reduceMotion = Boolean(useReducedMotion());
-  const slideTimes = [0, 0.2381, 0.3452, 0.6548, 0.7619, 1] as const;
-  const slideEase = [
-    "linear",
-    "easeInOut",
-    "linear",
-    "easeInOut",
-    "linear",
-  ] as const;
+  const slideTimes = [0, 0.2381, 0.3452, 0.6548, 0.7619, 1];
+  const slideEase = ease("linear", "easeInOut", "linear", "easeInOut", "linear");
 
   return (
     <ScaledPhone>
@@ -394,13 +389,13 @@ export function VocabDetailPhone() {
                   className="text-xs leading-[18px] text-[var(--lt-neutral-400)]"
                   initial={{ opacity: 1 }}
                   animate={{ opacity: [1, 1, 0, 0, 1, 1] }}
-                  transition={{
+                  transition={tr({
                     opacity: {
                       ...VOCAB_LOOP,
                       times: slideTimes,
                       ease: slideEase,
                     },
-                  }}
+                  })}
                 >
                   1 / 24
                 </motion.p>
@@ -408,13 +403,13 @@ export function VocabDetailPhone() {
                   className="absolute top-[17px] left-[310px] text-xs leading-[18px] text-[var(--lt-neutral-400)]"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: [0, 0, 1, 1, 0, 0] }}
-                  transition={{
+                  transition={tr({
                     opacity: {
                       ...VOCAB_LOOP,
                       times: slideTimes,
                       ease: slideEase,
                     },
-                  }}
+                  })}
                 >
                   2 / 24
                 </motion.p>
@@ -433,14 +428,14 @@ export function VocabDetailPhone() {
                     opacity: [1, 1, 0, 0, 1, 1],
                     x: [0, 0, -32, -32, 0, 0],
                   }}
-                  transition={{
+                  transition={tr({
                     opacity: {
                       ...VOCAB_LOOP,
                       times: slideTimes,
                       ease: slideEase,
                     },
                     x: { ...VOCAB_LOOP, times: slideTimes, ease: slideEase },
-                  }}
+                  })}
                 >
                   <WordEntry {...WORD_A} />
                 </motion.div>
@@ -451,14 +446,14 @@ export function VocabDetailPhone() {
                     opacity: [0, 0, 1, 1, 0, 0],
                     x: [32, 32, 0, 0, 32, 32],
                   }}
-                  transition={{
+                  transition={tr({
                     opacity: {
                       ...VOCAB_LOOP,
                       times: slideTimes,
                       ease: slideEase,
                     },
                     x: { ...VOCAB_LOOP, times: slideTimes, ease: slideEase },
-                  }}
+                  })}
                 >
                   <WordEntry {...WORD_B} />
                 </motion.div>

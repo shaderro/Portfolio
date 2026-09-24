@@ -2,16 +2,17 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { ease, type Bezier } from "./fm";
 import { LtIcon } from "./LtIcon";
 
 const STAGE_W = 400;
 const STAGE_H = 844;
 const DURATION = 7.6;
-const LOOP = { duration: DURATION, repeat: Infinity } as const;
-const EASE_FADE3 = ["linear", "easeInOut", "linear"] as const;
-const EASE_FADE5 = ["linear", "easeInOut", "linear", "easeInOut", "linear"] as const;
-const EASE_OUT5 = ["linear", "easeOut", "linear", "easeOut", "linear"] as const;
-const EASE_OUT9 = [
+const LOOP = { duration: DURATION, repeat: Infinity };
+const EASE_FADE3 = ease("linear", "easeInOut", "linear");
+const EASE_FADE5 = ease("linear", "easeInOut", "linear", "easeInOut", "linear");
+const EASE_OUT5 = ease("linear", "easeOut", "linear", "easeOut", "linear");
+const EASE_OUT9 = ease(
   "linear",
   "easeOut",
   "linear",
@@ -21,9 +22,10 @@ const EASE_OUT9 = [
   "linear",
   "easeOut",
   "linear",
-] as const;
-const EASE_DROP_Y = [
-  [0.5, 0, 0.5, 1],
+);
+const DROP_Y: Bezier = [0.5, 0, 0.5, 1];
+const EASE_DROP_Y = ease(
+  DROP_Y,
   "easeOut",
   "linear",
   "easeOut",
@@ -32,39 +34,39 @@ const EASE_DROP_Y = [
   "linear",
   "easeOut",
   "linear",
-] as const;
+);
 const READING_OPACITY = {
   ...LOOP,
   times: [0, 0.1974, 0.2632, 0.7237, 0.7895, 1],
   ease: EASE_FADE5,
-} as const;
+};
 const READING_X = {
   ...LOOP,
   times: [0, 0.1974, 0.2632, 0.7224, 0.7237, 0.7895, 1],
-  ease: ["linear", "easeInOut", "linear", "linear", "easeInOut", "linear"] as const,
-} as const;
+  ease: ease("linear", "easeInOut", "linear", "linear", "easeInOut", "linear"),
+};
 const REVIEW_T = {
   ...LOOP,
   times: [0, 0.1974, 0.2632, 0.4605, 0.5263, 1],
   ease: EASE_FADE5,
-} as const;
+};
 const PROFILE_T = {
   ...LOOP,
   times: [0, 0.4605, 0.5263, 0.7237, 0.7895, 1],
   ease: EASE_FADE5,
-} as const;
+};
 const HUB_T = {
   ...LOOP,
   times: [0, 0.1316, 0.1908, 0.3618, 0.4211, 1],
   ease: EASE_FADE5,
-} as const;
+};
 const HUB_LINEAR = {
   ...LOOP,
   times: [0, 0.1316, 0.1908, 0.3618, 0.4211, 1],
-  ease: "linear",
-} as const;
-const HUB_ON = [1, 1, 0, 0, 1, 1] as const;
-const HUB_OFF = [0, 0, 1, 1, 0, 0] as const;
+  ease: "linear" as const,
+};
+const HUB_ON = [1, 1, 0, 0, 1, 1];
+const HUB_OFF = [0, 0, 1, 1, 0, 0];
 const EXAMPLE_CARD_BODY =
   "This is an example text. This is an example text.";
 const HUB_VOCAB_CARDS = [

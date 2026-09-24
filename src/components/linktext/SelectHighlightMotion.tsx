@@ -1,23 +1,19 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { ease, tr, type Bezier } from "./fm";
 
 const DURATION = 5.5;
-const LOOP = { duration: DURATION, repeat: Infinity } as const;
-const FADE_EASE = [
-  "linear",
-  [0.25, 0.1, 0.25, 1],
-  "linear",
-  "easeInOut",
-  "linear",
-] as const;
-const FADE_OPACITY = [0, 0, 1, 1, 0, 0] as const;
+const LOOP = { duration: DURATION, repeat: Infinity };
+const SOFT: Bezier = [0.25, 0.1, 0.25, 1];
+const FADE_EASE = ease("linear", SOFT, "linear", "easeInOut", "linear");
+const FADE_OPACITY = [0, 0, 1, 1, 0, 0];
 const WAVE_A = [0, 0.0727, 0.1273, 0.3636, 0.4182, 1];
 const WAVE_B = [0, 0.5818, 0.6364, 0.8727, 0.9273, 1];
-const BG_KEYS = ["#EAEAED", "#EAEAED", "#EAEAED", "#F4F4F6"] as const;
+const BG_KEYS = ["#EAEAED", "#EAEAED", "#EAEAED", "#F4F4F6"];
 const BG_A = [0, 0.1272, 0.1273, 0.2];
 const BG_B = [0, 0.6363, 0.6364, 0.7091];
-const BG_EASE = ["linear", "linear", [0.25, 0.1, 0.25, 1]] as const;
+const BG_EASE = ease("linear", "linear", SOFT);
 
 const ARTICLE = `Die Berliner Mauer war mehr als 28 Jahre lang das Symbol des Kalten Krieges und der Teilung Deutschlands. Errichtet im August 1961, trennte sie Ost - und Westberlin und wurde zu einer fast unuberwindbaren Grenze. Über 100.000 Menschen versuchten, die Mauer zu überwinden - einige schafften es, viele scheiterten tragisch. Die beruhmten Worte von US-Prasident John F. Kennedy ' Ich bin ein Berliner' wurden vor der Mauer gesprochen. Am 9. November 1989 fiel die Mauer friedlich, nachdem ein DDR-Funktionar versehentlich die Grenzöffnung bekannt gab. Heute erinnern nur noch wenige erhaltene Mauerteile und das Denkmal an der Bernauer Straße an diese Zeit. Die East Side Gallery zeigt bunte Graffiti-Kunst auf dem langsten noch stehenden Mauerabschnitt. Für viele Deutsche bleibt der Mauerfall das wichtigste Ereignis der jungeren Geschichte .`;
 
@@ -57,15 +53,15 @@ function Band({
         reduceMotion
           ? undefined
           : withBackground && backgroundTimes
-            ? {
+            ? tr({
                 opacity: { ...LOOP, times, ease: FADE_EASE },
                 background: {
                   ...LOOP,
                   times: backgroundTimes,
                   ease: BG_EASE,
                 },
-              }
-            : { ...LOOP, times, ease: FADE_EASE }
+              })
+            : tr({ ...LOOP, times, ease: FADE_EASE })
       }
     />
   );
@@ -142,7 +138,7 @@ export function SelectHighlightMotion() {
             transition={
               reduceMotion
                 ? undefined
-                : { ...LOOP, times: WAVE_B, ease: FADE_EASE }
+                : tr({ ...LOOP, times: WAVE_B, ease: FADE_EASE })
             }
           >
             <motion.path
@@ -156,7 +152,7 @@ export function SelectHighlightMotion() {
               transition={
                 reduceMotion
                   ? undefined
-                  : { ...LOOP, times: BG_B, ease: BG_EASE }
+                  : tr({ ...LOOP, times: BG_B, ease: BG_EASE })
               }
             />
           </motion.svg>

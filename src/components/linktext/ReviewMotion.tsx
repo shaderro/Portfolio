@@ -3,12 +3,13 @@
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { ease, tr } from "./fm";
 import { LtIcon } from "./LtIcon";
 import { NavButton, TopNav } from "./product";
 import { ScaledStage } from "./ScaledStage";
 
 const DURATION = 4.5;
-const LOOP = { duration: DURATION, repeat: Infinity } as const;
+const LOOP = { duration: DURATION, repeat: Infinity };
 const SPRING_EASE = (t: number) =>
   1 -
   Math.exp(-t * 7.8685) *
@@ -16,23 +17,23 @@ const SPRING_EASE = (t: number) =>
 
 const CARD_FADE = {
   times: [0, 0.4444, 0.4711, 1],
-  ease: ["linear", "easeOut", "linear"] as const,
+  ease: ease("linear", "easeOut", "linear"),
 };
 const SECTION_FADE = {
   times: [0, 0.4622, 0.5222, 1],
-  ease: ["linear", "easeOut", "linear"] as const,
+  ease: ease("linear", "easeOut", "linear"),
 };
 const SECTION_SPRING = {
   times: [0, 0.4622, 0.5778, 1],
-  ease: ["linear", SPRING_EASE, "linear"] as const,
+  ease: ease("linear", SPRING_EASE, "linear"),
 };
 const ACTION_FADE = {
   times: [0, 0.4778, 0.5444, 1],
-  ease: ["linear", "easeOut", "linear"] as const,
+  ease: ease("linear", "easeOut", "linear"),
 };
 const ACTION_Y = {
   times: [0, 0.4778, 0.5667, 1],
-  ease: ["linear", SPRING_EASE, "linear"] as const,
+  ease: ease("linear", SPRING_EASE, "linear"),
 };
 
 function ProgressBar({
@@ -291,7 +292,7 @@ function VocabExpanded({ reduceMotion }: { reduceMotion: boolean }) {
       className="flex w-[450px] flex-col overflow-hidden rounded-[10px] bg-white shadow-[0_0.8px_2.5px_rgba(0,0,0,0.06),0_3.3px_16.7px_rgba(0,0,0,0.07)]"
       initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
       animate={reduceMotion ? { opacity: 1 } : { opacity: [0, 0, 1, 1] }}
-      transition={reduceMotion ? undefined : { opacity: { ...LOOP, ...CARD_FADE } }}
+      transition={reduceMotion ? undefined : tr({ opacity: { ...LOOP, ...CARD_FADE } })}
     >
       <CardHeader current={6} total={17} />
       <VocabPrompt />
@@ -317,11 +318,11 @@ function VocabExpanded({ reduceMotion }: { reduceMotion: boolean }) {
         transition={
           reduceMotion
             ? undefined
-            : {
+            : tr({
                 opacity: { ...LOOP, ...SECTION_FADE },
                 scale: { ...LOOP, ...SECTION_SPRING },
                 y: { ...LOOP, ...SECTION_SPRING },
-              }
+              })
         }
       >
         <div className="flex flex-col gap-1.5 border-t border-[var(--lt-neutral-100)] pt-3.5">
@@ -356,10 +357,10 @@ function VocabExpanded({ reduceMotion }: { reduceMotion: boolean }) {
         transition={
           reduceMotion
             ? undefined
-            : {
+            : tr({
                 opacity: { ...LOOP, ...ACTION_FADE },
                 y: { ...LOOP, ...ACTION_Y },
-              }
+              })
         }
       >
         <ActionButtons />
@@ -423,7 +424,7 @@ function GrammarExpanded({ reduceMotion }: { reduceMotion: boolean }) {
       className="flex w-[450px] flex-col"
       initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
       animate={reduceMotion ? { opacity: 1 } : { opacity: [0, 0, 1, 1] }}
-      transition={reduceMotion ? undefined : { opacity: { ...LOOP, ...CARD_FADE } }}
+      transition={reduceMotion ? undefined : tr({ opacity: { ...LOOP, ...CARD_FADE } })}
     >
       <article className="overflow-hidden rounded-[10px] bg-white shadow-[0_0.8px_2.5px_rgba(0,0,0,0.06),0_3.3px_16.7px_rgba(0,0,0,0.07)]">
         <CardHeader current={3} total={14} />
@@ -447,11 +448,11 @@ function GrammarExpanded({ reduceMotion }: { reduceMotion: boolean }) {
           transition={
             reduceMotion
               ? undefined
-              : {
+              : tr({
                   opacity: { ...LOOP, ...SECTION_FADE },
                   scale: { ...LOOP, ...SECTION_SPRING },
                   y: { ...LOOP, ...SECTION_SPRING },
-                }
+                })
           }
         >
           <div className="flex flex-col gap-3.5 text-[11px] leading-[17px] text-[var(--lt-neutral-600)]">
@@ -500,10 +501,10 @@ function GrammarExpanded({ reduceMotion }: { reduceMotion: boolean }) {
           transition={
             reduceMotion
               ? undefined
-              : {
+              : tr({
                   opacity: { ...LOOP, ...ACTION_FADE },
                   y: { ...LOOP, ...ACTION_Y },
-                }
+                })
           }
         >
           <ActionButtons />
@@ -527,7 +528,7 @@ function CollapsedOverlay({
       initial={reduceMotion ? { opacity: 0 } : { opacity: 1 }}
       animate={reduceMotion ? { opacity: 0 } : { opacity: [1, 1, 0, 0] }}
       transition={
-        reduceMotion ? undefined : { opacity: { ...LOOP, ...CARD_FADE } }
+        reduceMotion ? undefined : tr({ opacity: { ...LOOP, ...CARD_FADE } })
       }
     >
       {children}

@@ -1,13 +1,14 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { ease, tr } from "./fm";
 import { TopNav } from "./product";
 import { ScaledStage } from "./ScaledStage";
 
 const DURATION = 14;
 const SCROLL_Y = -370.44 * (1200 / 588);
 const TIMES = [0, 0.0357, 0.4643, 0.5357, 0.9643, 1];
-const EASE = ["linear", "easeInOut", "linear", "easeInOut", "linear"] as const;
+const EASE = ease("linear", "easeInOut", "linear", "easeInOut", "linear");
 
 export function ProfileScrollMotion() {
   const reduceMotion = Boolean(useReducedMotion());
@@ -30,14 +31,14 @@ export function ProfileScrollMotion() {
           transition={
             reduceMotion
               ? undefined
-              : {
+              : tr({
                   y: {
                     duration: DURATION,
                     times: TIMES,
                     ease: EASE,
                     repeat: Infinity,
                   },
-                }
+                })
           }
         />
         <TopNav className="absolute inset-x-0 top-0 z-10" />
